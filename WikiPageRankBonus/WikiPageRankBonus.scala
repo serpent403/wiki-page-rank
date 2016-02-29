@@ -13,27 +13,21 @@ object WikiPageRankBonus {
    
   def main(args: Array[String]) {
     val t1 = System.currentTimeMillis()
-    var master = args(0).trim
-    var dumpPath = args(1).trim
+    // var master = args(0).trim
+    var dumpPath = args(0).trim
     var univsPath = "s3n://amandataset/wex/universities.txt"
     
-    if((master == null) || (master.length() < 1)) {
-      println("Arg0 missing. Mention 'local' or master url")
-      return
-    }  
-    
     if((dumpPath == null) || (dumpPath.length() < 1)) {
-      println("Arg1 missing. Please specify the dump file location!")
+      println("Argument missing. Please specify the dump file location!")
       return
     }  
 
-    if(args(2).length() > 1) {
-      univsPath = args(2).trim
+    if(args(1).length() > 1) {
+      univsPath = args(1).trim
     }
 
     val iters = 10
-    val conf = new SparkConf().setAppName("WikiPageRankBonus").setMaster(master)
-    val sc = new SparkContext(conf)
+    val sc = new SparkContext()
     val wiki: RDD[String] = sc.textFile(dumpPath).coalesce(20)
     
     // Parse the articles

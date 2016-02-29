@@ -8,22 +8,15 @@ object WikiPageRankSpark {
    
   def main(args: Array[String]) {
     val t1 = System.currentTimeMillis()
-    var master = args(0).trim
-    var dumpPath = args(1).trim
-    
-    if((master == null) || (master.length() < 1)) {
-      println("Arg0 missing. Mention 'local' or master url")
-      return
-    }  
+    var dumpPath = args(0).trim
     
     if((dumpPath == null) || (dumpPath.length() < 1)) {
-      println("Arg1 missing. Please specify the dump file location!")
+      println("Argument missing. Please specify the dump file location!")
       return
     }  
     
     val iters = 10
-    val conf = new SparkConf().setAppName("WikiPageRankSpark").setMaster(master)
-    val sc = new SparkContext(conf)
+    val sc = new SparkContext()
     val wiki: RDD[String] = sc.textFile(dumpPath).coalesce(20)
     
     // Parse the articles
